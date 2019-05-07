@@ -103,7 +103,7 @@ app.get("/login/:username/:password", function(req, res) {
           res.send("You are logged in.");
 
         } else {
-          // res.redirect("/");
+
           res.send("Username and password does not match.");
         }
       });
