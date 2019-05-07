@@ -35,7 +35,7 @@ function login(n,p){
 
 	$.ajax({
     url: `/login/${n}/${p}`,
-    method: 'GET'
+    method: 'POST'
 
   	}).then(function(l){
 
@@ -52,7 +52,7 @@ function signup(n,p){
 
 	$.ajax({
     url: `/signup/${n}/${p}`,
-    method: 'GET'
+    method: 'POST'
 
   	}).then(function(s){
 

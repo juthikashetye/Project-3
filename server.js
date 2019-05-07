@@ -50,15 +50,15 @@ connection.connect();
 //   res.send('hi');
 // });
 
-app.get("/users/:id", function(req, res) {
-  connection.query("SELECT * FROM users WHERE id = ?", [req.params.id], function(error, results, fields) {
+app.get("/users/:user_id", function(req, res) {
+  connection.query("SELECT * FROM users WHERE id = ?", [req.params.user_id], function(error, results, fields) {
     if (error) throw error;
 
     res.json(results[0]);
   });
 });
 
-app.get("/signup/:username/:password", function(req, res) {
+app.post("/signup/:username/:password", function(req, res) {
 
   bcrypt.genSalt(10, function(err, salt) {
     // res.send(salt);
@@ -82,7 +82,7 @@ app.get("/signup/:username/:password", function(req, res) {
   });
 });
 
-app.get("/login/:username/:password", function(req, res) {
+app.post("/login/:username/:password", function(req, res) {
 
   connection.query("SELECT * FROM users WHERE username = ?", [req.params.username], function(error, results, fields) {
 
@@ -111,7 +111,79 @@ app.get("/login/:username/:password", function(req, res) {
   });
 });
 
-app.get("/another-page", function(req, res) {
+// inserts info into notebooks table
+app.post("/add-notebook/:user_id", function(req, res) {
+
+  connection.query("INSERT INTO notebooks (notebook_name, user_id) VALUES (?, ?)", [req.body.notebook_name, req.params.user_id], function(error, results, fields) {
+
+      if (error) res.send(error)
+      else res.send(results.insertId.toString());
+
+  });
+
+});
+
+// inserts info into notes table
+app.post("/add-notes/:notebook_id", function(req, res) {
+
+  connection.query("INSERT INTO notes (title,ingredients,instructions,image,source,notebook_id) VALUES (?,?,?,?,?,?)",
+    [req.body.title,req.body.ingredients,req.body.instructions,req.body.image,req.body.source,req.params.notebook_id],
+    function(error, results, fields) {
+
+      if (error) res.send(error)
+      else res.send(results.insertId.toString());
+
+  });
+});
+
+// gets all notes for specified notebook
+app.get("/get-notebook-notes/:notebook_id", function(req, res) {
+
+  connection.query("SELECT * FROM notes WHERE notebook_id = ?", [req.params.notebook_id], function(error, results, fields) {
+
+    if (error) res.send(error)
+    else res.json(results);
+
+  });
+});
+
+// gets all notes for specified user
+app.get("/get-all-notes/:user_id", function(req, res) {
+
+  var allNotes = `SELECT notes.id,notes.title,notes.ingredients,notes.instructions,notes.image,notes.source 
+                  FROM notes
+                  LEFT JOIN notebooks 
+                  ON notes.notebook_id = notebooks.id 
+                  LEFT JOIN users 
+                  ON notebooks.user_id = users.id 
+                  WHERE users.id = ?`
+
+  connection.query(allNotes, [req.params.user_id], function(error, results, fields) {
+
+    if (error) res.send(error)
+    else res.json(results);
+
+  });
+});
+
+// gets all notebooks for specified user
+app.get("/get-all-notebooks/:user_id", function(req, res) {
+
+  var allNotebooks = `SELECT notebooks.id,notebooks.notebook_name 
+                      FROM notebooks
+                      LEFT JOIN users 
+                      ON notebooks.user_id = users.id 
+                      WHERE users.id = ?`
+
+  connection.query(allNotebooks, [req.params.user_id], function(error, results, fields) {
+
+    if (error) res.send(error)
+    else res.json(results);
+
+  });
+});
+
+app.get("/get-session", function(req, res) {
   var user_info = {
     user_id: req.session.user_id,
     username: req.session.username
