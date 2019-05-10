@@ -5,6 +5,8 @@
     <!-- Required meta tag for responsiveness -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Notes App</title>
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <!-- CSS files -->
@@ -14,28 +16,20 @@
   <body>
     <div class="container center-align">
 
-      <div class="userLoginSignUp">
+      <h1>Notes App</h1>
 
-        <div class="row">
-	        <div class="input-field col s12 m6 offset-m3">
-	          <input id="username" type="text" name="name_input" class="validate">
-	          <label for="username">Username</label>
-	          <span class="helper-text left-align">Required*</span>
-	        </div>
-      	</div>
-      	<div class="row">
-	      	<div class="input-field col s12 m6 offset-m3">
-	          <input id="password" type="password" name="password_input" class="validate">
-	          <label for="password">Password</label>
-	          <span class="helper-text left-align">Required*</span>
-        	</div>
-        
-      	</div>
+          <div class="row">
+            <form>
+          <div class="input-field col s6">
+            <select id="notebookNotes">
+              <option value="" disabled selected>Select a recipe</option>
+            </select>
+            <label>Recipe books</label>
+          </div>
+          </form>
+          <button class="btn waves-effect waves-light"><i class="material-icons left">add_circle</i>Add a new recipe</button>
+        </div>
 
-        <button class="btn btn-primary btn-md" id="loginButton">LOGIN</button>
-        <button class="btn btn-secondary btn-md" id="signupButton">SIGN-UP</button>
-
-      </div>
 
     </div>
 
@@ -46,6 +40,19 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     <!-- JS code -->
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+      $('select').formSelect();
+      $('select').on('contentChanged', function() {
+        $(this).formSelect();
+      });
+      $('.sidenav').sidenav();
+      $('.modal').modal();
+      // console.log(userId);
+      // getNotebooks(userId);
+      getSessionInfo();
+      getNotebooks(globalUserId);
+      });
+    </script>
   </body>
 </html>

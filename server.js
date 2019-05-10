@@ -100,7 +100,11 @@ app.post("/login/:username/:password", function(req, res) {
           req.session.user_id = results[0].id;
           req.session.username = results[0].username;
 
-          res.send("You are logged in.");
+          res.json(
+            {msg: "You are logged in.",
+            user_id: results[0].id,
+            username: results[0].username}
+            );
 
         } else {
 
@@ -191,6 +195,11 @@ app.get("/get-session", function(req, res) {
 
   res.json(user_info);
 });
+
+// app.get('/get-session', function(req, res) {
+//   console.log(req.session.uname)
+//   res.send([req.session.uname, req.session.uid, req.session.tid, req.session.tname, req.session.uscore])
+// });
 
 app.get("/logout", function(req, res) {
   req.session.destroy(function(err) {
