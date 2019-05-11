@@ -18,16 +18,17 @@
 
       <h1>Notes App</h1>
 
-          <div class="row">
-            <form>
+        <div class="row">
+           
           <div class="input-field col s6">
             <select id="notebookNotes">
               <option value="" disabled selected>Select a recipe</option>
             </select>
             <label>Recipe books</label>
           </div>
-          </form>
+         
           <button class="btn waves-effect waves-light"><i class="material-icons left">add_circle</i>Add a new recipe</button>
+
         </div>
 
 
@@ -48,10 +49,9 @@
       });
       $('.sidenav').sidenav();
       $('.modal').modal();
-      // console.log(userId);
-      // getNotebooks(userId);
       getSessionInfo();
-      getNotebooks(globalUserId);
+      //getNotebooks(globalUserId);
+      getnotes(globalUserId);
       });
     </script>
   </body>

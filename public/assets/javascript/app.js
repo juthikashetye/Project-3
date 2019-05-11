@@ -2,6 +2,7 @@ var name = ""
 var pass = "";
 var globalUserId;
 var globalName;
+var notebookId;
 
 $(document).ready(function() {
 
@@ -68,30 +69,39 @@ function signup(n,p){
   	});
 }
 
-function getNotebooks(id){
+function getnotes(id){
 
 	$.ajax({
-    url: `/get-all-notebooks/${id}`,
+    url: `/get-all-notes/${id}`,
     method: 'GET',
     async: false
 
-  	}).done(function(nb){
+  	}).done(function(nt){
 
-  		console.log(nb);
+  		console.log(nt);
+ 		var notebookName = "";
 
-  		for (var i = 0; i < nb.length; i++) {
+  		for (var i = 0; i < nt.length; i++) {
 
-  			var optGroup = $("<optgroup>").attr("label", nb[i].notebook_name);
-  			$("#notebookNotes").append(optGroup);
+			if(notebookName != nt[i].notebook_name) {
+				var optGrp = $("<optgroup>")
+				.attr("label", nt[i].notebook_name)
+				.attr("id", "optGroup" + nt[i].Notebooks_Id)
+				notebookName = nt[i].notebook_name;
+				$("#notebookNotes").append(optGrp);
+			}
+
+  			var opt = $("<option>").attr("value", nt[i].title).text(nt[i].title);
+  			$("#optGroup" + nt[i].Notebooks_Id).append(opt);
 
 
   			$("#notebookNotes").trigger('contentChanged');
 
   		}
 
-
   	});
 }
+
 function getSessionInfo() {
 
   $.ajax({

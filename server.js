@@ -46,10 +46,6 @@ if (process.env.JAWSDB_URL) {
 
 connection.connect();
 
-// app.get('/', function(req, res){
-//   res.send('hi');
-// });
-
 app.get("/users/:user_id", function(req, res) {
   connection.query("SELECT * FROM users WHERE id = ?", [req.params.user_id], function(error, results, fields) {
     if (error) throw error;
@@ -154,13 +150,17 @@ app.get("/get-notebook-notes/:notebook_id", function(req, res) {
 // gets all notes for specified user
 app.get("/get-all-notes/:user_id", function(req, res) {
 
-  var allNotes = `SELECT notes.id,notes.title,notes.ingredients,notes.instructions,notes.image,notes.source 
+  var allNotes = `SELECT notes.id AS Notes_Id,
+                        notes.title,notes.ingredients,
+                        notes.instructions,
+                        notes.image,notes.source,
+                        notebooks.id AS Notebooks_Id,
+                        notebooks.notebook_name 
                   FROM notes
                   LEFT JOIN notebooks 
-                  ON notes.notebook_id = notebooks.id 
-                  LEFT JOIN users 
-                  ON notebooks.user_id = users.id 
-                  WHERE users.id = ?`
+                  ON notes.notebook_id = notebooks.id
+                  WHERE notebooks.user_id = ?
+                  ORDER BY notebooks.notebook_name`
 
   connection.query(allNotes, [req.params.user_id], function(error, results, fields) {
 

@@ -30,4 +30,3 @@ CREATE TABLE notes (
 	FOREIGN KEY (notebook_id) REFERENCES notebooks(id),
 	PRIMARY KEY (id)
 );
-
